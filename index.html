@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Intrachat</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #000000;
+      color: #cdf41f;
+      padding: 20px;
+      display: flex;
+      gap: 20px;
+    }
+    #chat {
+      background: white;
+      color: blue;
+      border: 1px solid #ccc;
+      height: 300px;
+      overflow-y: auto;
+      padding: 10px;
+      flex: 1;
+    }
+    #users {
+      background: white;
+      color: blue;
+      border: 1px solid #ccc;
+      width: 150px;
+      height: 300px;
+      overflow-y: auto;
+      padding: 10px;
+    }
+    #msgbox {
+      display: flex;
+      gap: 5px;
+      margin-top: 10px;
+    }
+    input {
+      flex: 1;
+      padding: 8px;
+    }
+    button {
+      padding: 8px 15px;
+      background: #0078d7;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #005fa3;
+    }
+  </style>
+</head>
+<body>
+  <div style="flex: 1">
+    <h1> 💬 Say something :) </h1>
+    <div id="chat"></div>
+    <div id="msgbox">
+      <input id="messageInput" placeholder="Type a message...">
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <div>
+    <h3>👥 Connected</h3>
+    <div id="users"></div>
+  </div>
+
+  <script>
+    const name = prompt("What is your name?");
+    const ws = new WebSocket("ws://" + location.host);
+
+    const chat = document.getElementById("chat");
+    const usersDiv = document.getElementById("users");
+    const input = document.getElementById("messageInput");
+
+    // Notify server about new user
+    ws.onopen = () => {
+      ws.send(JSON.stringify({ type: "new", name }));
+    };
+
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+
+      if (data.type === "message") {
+        // Normal chat message
+        chat.innerHTML += `<div><b>${data.name}:</b> ${data.text}</div>`;
+      } 
+      else if (data.type === "users") {
+        // Update user list
+        usersDiv.innerHTML = data.list
+          .map(u => `<div>${u}</div>`)
+          .join("");
+      } 
+      else if (data.type === "notification") {
+        // 💬 System notification (join / leave)
+        chat.innerHTML += `
+          <div style="text-align:center; color:gray; font-style:italic;">
+            ${data.text}
+          </div>`;
+      }
+
+      // Keep scroll at bottom
+      chat.scrollTop = chat.scrollHeight;
+    };
+
+    function sendMessage() {
+      if (input.value.trim() !== "") {
+        ws.send(JSON.stringify({
+          type: "message",
+          name,
+          text: input.value
+        }));
+        input.value = "";
+      }
+    }
+
+    // Send message when pressing Enter
+    input.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        sendMessage();
+      }
+    });
+  </script>
+</body>
+</html>
