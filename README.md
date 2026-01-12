@@ -44,7 +44,8 @@ This installs Express and ws, the packages needed to run the server.
 This runs server.js and starts the chat server at http://localhost:3002.
 
 ### 3. Open in browser
-http://localhost:3002
+[Open chat in browser] http://localhost:3002
+
 Open multiple tabs or different browsers to test real-time messaging between users.
 
 ⚠️ Notes
