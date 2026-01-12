@@ -2,10 +2,10 @@
   "name": "websocket-chat",
   "version": "1.0.0",
   "type": "module",
-  "main": "server.js",
+  "main": "chat.js",
   "private": true,
   "scripts": {
-    "start": "node server.js"
+    "start": "node chat.js"
   },
   "dependencies": {
     "express": "^5.1.0",
