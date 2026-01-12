@@ -17,25 +17,30 @@ A simple real-time chat application built with **Node.js**, **Express**, and **W
 - ws (WebSocket)
 - Vanilla HTML & JavaScript
 
-## Project Structure
-├── server.js
+## 📁 Project Structure
+```
+.
+├── chat.js
 ├── index.html
 ├── package.json
 ├── package-lock.json
 └── .gitignore
-
+```
 
 ## Getting Started
 Follow these steps to run the chat locally:
 
 ### 1. Install dependencies
 Open a terminal in the project folder and run:
- $ npm install 
- 
+```bash
+ npm install 
+ ```
 This installs Express and ws, the packages needed to run the server.
  
 ### 2. Start server
- $ npm start
+```bash
+ npm start 
+ ```
 This runs server.js and starts the chat server at http://localhost:3002.
 
 ### 3. Open in browser
